@@ -1,52 +1,52 @@
-// Adding a tile layer to myMap
-var tLayer = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+
+var titleLayer = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
   attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
   tileSize: 512,
   maxZoom: 18,
   zoomOffset: -1,
-  id: "mapbox/streets-v11",
+  id: "mapbox/streets-v10",
   accessToken: API_KEY
 })
-// Creating initial map 
+
 var myMap = L.map("mapid", {
   center: [37.09, -95.71],
-  zoom: 5
+  zoom: 4
 });
-tLayer.addTo(myMap);
-// Retrieve the data 
+titleLayer.addTo(myMap);
+// (Retrieve the data )
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(response) {
   function styleData(feature) {
     return {
-      color: "#fff",
+      color: "#e5e5e5",
       weight: 1,
       fillOpacity: 0.8,
       opacity: 1,
-      fillColor: colors(feature.geometry.coordinates[2]), 
+      fillColor: colors(feature.geometry.coordinates[3]), 
       radius: radfunc(feature.properties.mag),
       stroke: true
     };
   }
-  function colors(magnitude) {
+  function color(magnitudee) {
     switch (true) {
-    case magnitude > 90:
-      return "#C90D1A";
-    case magnitude > 70: 
-      return "#DA3B18";
-    case magnitude > 50:
-      return "#D76A14";
-    case magnitude > 30:
-      return "#D49910";
-    case magnitude > 10: 
-      return "#D1C80C";
+    case magnitudee > 80:
+      return "#ebfb9c";
+    case magnitudee > 60: 
+      return "#bcb40a";
+    case magnitudee > 50:
+      return "#e0b757";
+    case magnitudee > 35:
+      return "#e3965a";
+    case magnitudee > 9: 
+      return "#e5755d";
     default: 
-      return "#CEF708";
+      return "#ebfb9c";
     }
   }
-  function radfunc(rMagnitude) {
-    if (rMagnitude === 0) {
+  function radfunc(rMagnitudee) {
+    if (rMagnitudee === 0) {
       return 1; 
     }
-    return rMagnitude * 4;
+    return rMagnitudee * 6;
   }
   L.geoJson(response, {
     pointToLayer: function(feature, latlng) {
@@ -63,16 +63,16 @@ var legend = L.control({ position: "bottomright" });
 legend.onAdd = function() {
   var div = L.DomUtil.create("div", "info legend");
   var limits = [-10, 10, 30, 50, 70, 90];
-  var colors = [
-    "#CEF708",
-    "#D1C80C",
-    "#D49910",
-    "#D76A14",
-    "#DA3B18",
-    "#C90D1A"
+  var color = [
+    "#ebfb9c",
+    "#bcb40a",
+    "#e0b757",
+    "#e3965a",
+    "#e5755d",
+    "#d9555e"
   ];
   for (var i = 0; i < limits.length; i++) {
-    div.innerHTML += "<i style='background:"  + colors[i] + "'></i>"
+    div.innerHTML += "<i style='background:"  + color[i] + "'></i>"
     + limits[i] + (limits[i + 1] ? "&ndash;" + limits[i + 1] + "<br>" : "+");
   }
   return div;
