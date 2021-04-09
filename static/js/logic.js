@@ -14,7 +14,11 @@ var MMap = L.map("mapid", {
 });
 tileLayer.addTo(MMap);
 // (Retrieve the data )
-d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(AllWeekData) {
+//d3.csv("../countries.csv").then(function(AllWeekData) {
+d3.csv("../../countryPerDateVisits.csv").then(function(data){
+  //console.log(AllWeekData)
+  console.log(data)
+
   function styles(feature) {
     return {
       color: "#e5e5e5",
@@ -29,15 +33,15 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
   function createColors(colorMag) {
     switch (true) {
     case colorMag > 80:
-      return "#ebfb9c";
+      return "#d9555e";
     case colorMag > 60: 
-      return "#bcb40a";
-    case colorMag > 50:
-      return "#e0b757";
-    case colorMag > 35:
-      return "#e3965a";
-    case colorMag > 9: 
       return "#e5755d";
+    case colorMag > 50:
+      return "#e3965a";
+    case colorMag > 35:
+      return "#e0b757";
+    case colorMag > 9: 
+      return "#bcb40a";
     default: 
       return "#ebfb9c";
     }
@@ -48,7 +52,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
     }
     return radiusMag * 6;
   }
-  L.geoJson(AllWeekData, {
+  L.geoJson(data, {
     pointToLayer: function(feature, latlon) {
       return L.circleMarker(latlon);   
   },
